@@ -1,55 +1,46 @@
-const fs = require('fs');
-const path = require('path');
-const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
-let json = [{
-    "phase": "Entschuldigung!",
-    "trans": "Excuse me. [as in may I have your attention]."
-},
-{
-    "phase": "Sprechen Sie Englisch?",
-    "trans": "Do you speak English?"
-}]
+const fs = require("fs");
+const u = require("umbrellajs");
+const path = require("path");
+const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
-jest
-    .dontMock('fs');
+jest.dontMock("fs");
 
-describe('fetch list', function () {
-    beforeEach(() => {
-        document.documentElement.innerHTML = html.toString();
-    });
+json = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../language.json")));
 
-    afterEach(() => {
-        // restore the original func after test
-        jest.resetModules();
-        fetch.resetMocks();
-    });
+describe("fetch list", function () {
+  beforeEach(() => {
+    document.documentElement.innerHTML = html.toString();
+  });
 
-    it('get same items from json', function (done) {
-        fetch.mockResponse(JSON.stringify(json))
-        const {getItem} = require('../scripts/main.js');
+  beforeAll(async () => {
+    jest.setTimeout(10000);
+  });
 
-        getItem().then(res => {
-            expect(res).toEqual([{
-                "phase": "Entschuldigung!",
-                "trans": "Excuse me. [as in may I have your attention]."
-            },
-            {
-                "phase": "Sprechen Sie Englisch?",
-                "trans": "Do you speak English?"
-            }])
+  afterEach(() => {
+    // restore the original func after test
+    jest.resetModules();
+    fetch.resetMocks();
+  });
 
-            expect(res.length).toEqual(2);
-            done();
-        })
-        .catch(err => console.log(err))
-    });
 
-    // it('show text if failure', function (done) {
-    //     fetch.mockReject(new Error('Cannot found'));
-    //     const {getItem} = require('../scripts/main.js');
+  it("get same items from json", function (done) {
+    fetch.mockResponse(JSON.stringify(json));
+    const { getItem } = require("../scripts/main.js");
 
-    //     getItem()
-    //     .catch(err => console.log(err))
-    // });
+    getItem()
+      .then((res) => {
+        expect(res.length).toEqual(json.length);
+      })
+      .catch((err) => console.log(err));
+      done();
+  });
 
+  it('show text if failure', function (done) {
+      fetch.mockReject(new Error('Cannot found'));
+      const {getItem} = require('../scripts/main.js');
+
+      getItem()
+      .catch(err => console.log(err));
+      done();
+  });
 });

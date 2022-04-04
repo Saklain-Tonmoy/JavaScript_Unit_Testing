@@ -1,6 +1,8 @@
 const fs = require('fs');
+const u = require('umbrellajs')
 const path = require('path');
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+
 
 jest
 .dontMock('fs');
@@ -48,13 +50,18 @@ describe('phase list', function () {
         }];
 
         setItems(json);
-        document.getElementById('disable').addEventListener('click', triggerItem);
+
+        expect(u('.lang-grid--trans').hasClass('hide')).toBeFalsy();
 
         document.getElementById('disable').click();
-        expect(document.querySelector('.lang-grid--trans:nth-of-type(1)').classList.contains('hide')).toBeTruthy();
+        expect(u('.lang-grid--trans').hasClass('hide')).toBeTruthy();
 
-        document.getElementById('disable').click();
-        expect(document.querySelector('.lang-grid--trans:nth-of-type(1)').classList.contains('hide')).toBeFalsy();
+        u('#disable').trigger('click');
+        expect(u('.lang-grid--trans').hasClass('hide')).toBeFalsy();
+
+        u('#disable').trigger('click');
+        expect(u('.lang-grid--trans').hasClass('hide')).toBeTruthy();
+
     });
 
     it('stop func if no items', function () {
