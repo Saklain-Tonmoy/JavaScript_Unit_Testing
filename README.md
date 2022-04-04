@@ -1,5 +1,5 @@
 ### Testing example with plain HTML and JS
-A simple example of how to use Jest to test `pure JS + HTML page` and `Umbrella JS + HTML page`. With testing using `jest-fetch-mock` to test `fetch calls`.
+A simple example of how to use Jest to test `Vanilla JS + HTML page` and `Umbrella JS + HTML page`. With testing using `jest-fetch-mock` to test `fetch calls`.
 
 ### How to use
 Just clone this repo! Then use `npm install` to install all needed packages.
