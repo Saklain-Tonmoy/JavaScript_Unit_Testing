@@ -30,7 +30,6 @@ describe("fetch list", function () {
 
     getItem()
       .then((res) => {
-        console.log(res);
         expect(res.length).toEqual(json.length);
       })
       .catch((err) => console.log(err));
